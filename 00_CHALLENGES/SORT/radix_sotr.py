@@ -46,6 +46,8 @@ Example:
 class RadixSort:
     @staticmethod
     def sort(lst: list[int]) -> list[int]:
+        if not lst:
+            return []
         max_val: int = max(lst)
         digit_place: int = 1
 
@@ -68,6 +70,13 @@ class RadixSort:
         return lst
 
 
-lst = [9, 13, 104, 1245, 585, 9765234, 16, 95672, 258234, 1000, 0]
-radix_sort = RadixSort.sort(lst)
-print(radix_sort)
+# Examples / tests
+examples = [
+    [],
+    [4],
+    [4, 2, 2, 8, 3, 3, 1],
+    [0, 1, 2, 3],
+    [9, 3, 4, 5, 5, 7, 6, 9, 2, 10, 0],
+]
+for lst in examples:
+    print(f"{lst} -> {RadixSort.sort(lst)}")

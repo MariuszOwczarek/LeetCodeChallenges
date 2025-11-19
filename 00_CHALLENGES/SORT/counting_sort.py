@@ -43,6 +43,8 @@ Example:
 class CountingSort:
     @staticmethod
     def sort(lst: list[int]) -> list[int]:
+        if not lst:
+            return []
         max_val: int = max(lst)
         count_arr: list[int] = [0] * (max_val + 1)
 
@@ -55,6 +57,13 @@ class CountingSort:
         return new_lst
 
 
-lst = [9, 3, 4, 5, 5, 7, 6, 9, 2, 10, 0]
-counting_sort = CountingSort.sort(lst)
-print(counting_sort)
+# Examples / tests
+examples = [
+    [],
+    [4],
+    [4, 2, 2, 8, 3, 3, 1],
+    [0, 1, 2, 3],
+    [9, 3, 4, 5, 5, 7, 6, 9, 2, 10, 0],
+]
+for lst in examples:
+    print(f"{lst} -> {CountingSort.sort(lst)}")

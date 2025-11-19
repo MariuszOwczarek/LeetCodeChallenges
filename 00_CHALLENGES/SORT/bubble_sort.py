@@ -27,16 +27,23 @@ BUBBLE SORT
 class BubbleSort:
     @staticmethod
     def sort(lst: list[int]) -> list[int]:
-        sorted: bool = True
-        while sorted:
-            sorted = False
+        swapped: bool = True
+        while swapped:
+            swapped = False
             for i in range(1, len(lst)):
                 if lst[i - 1] > lst[i]:
                     lst[i - 1], lst[i] = lst[i], lst[i-1]
-                    sorted = True
+                    swapped = True
         return lst
 
 
-lst = [9, 3, 4, -1, 5, 8, 7, 6, 1, 2, 0]
-bubble_sort = BubbleSort.sort(lst)
-print(bubble_sort)
+# Examples / tests
+examples = [
+    [],
+    [4],
+    [4, 2, 2, 8, 3, 3, 1],
+    [0, 1, 2, 3],
+    [9, 3, 4, 5, 5, 7, 6, 9, 2, 10, 0],
+]
+for lst in examples:
+    print(f"{lst} -> {BubbleSort.sort(lst)}")
