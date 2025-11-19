@@ -1,4 +1,6 @@
 """
+QUICK SORT
+
 Sort a list of integers in ascending order using the Quick Sort algorithm.
 
 Quick Sort is a recursive divide-and-conquer sorting algorithm:
