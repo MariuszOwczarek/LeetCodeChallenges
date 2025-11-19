@@ -26,15 +26,14 @@ BUBBLE SORT
 
 class BubbleSort:
     @staticmethod
-    def sort(lst: list[int]):
-        sorted = True
+    def sort(lst: list[int]) -> list[int]:
+        sorted: bool = True
         while sorted:
             sorted = False
             for i in range(1, len(lst)):
                 if lst[i - 1] > lst[i]:
                     lst[i - 1], lst[i] = lst[i], lst[i-1]
                     sorted = True
-                    print(lst)
         return lst
 
 

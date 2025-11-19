@@ -45,22 +45,22 @@ Example:
 
 class RadixSort:
     @staticmethod
-    def sort(lst):
-        max_val = max(lst)
-        digit_place = 1
+    def sort(lst: list[int]) -> list[int]:
+        max_val: int = max(lst)
+        digit_place: int = 1
 
         while max_val // digit_place > 0:
-            count_arr = [0] * 10
+            count_arr: list[int] = [0] * 10
             for number in lst:
-                current_digit = (number // digit_place) % 10
+                current_digit: int = (number // digit_place) % 10
                 count_arr[current_digit] += 1
 
             for i in range(1, len(count_arr)):
                 count_arr[i] += count_arr[i - 1]
 
-            output = [0] * len(lst)
+            output: list[int] = [0] * len(lst)
             for i in range(len(lst)-1, -1, -1):
-                current_digit = (lst[i] // digit_place) % 10
+                current_digit: int = (lst[i] // digit_place) % 10
                 output[count_arr[current_digit] - 1] = lst[i]
                 count_arr[current_digit] -= 1
             lst = output[:]

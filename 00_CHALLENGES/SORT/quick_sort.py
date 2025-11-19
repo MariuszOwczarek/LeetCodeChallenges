@@ -32,18 +32,18 @@ Example:
 
 class QuickSort:
     @staticmethod
-    def sort(lst):
+    def sort(lst: list[int]) -> list[int]:
         if len(lst) <= 1:
             return lst
 
-        pivot = lst[-1]
-        left = [i for i in lst[:-1] if i <= pivot]
-        right = [i for i in lst[:-1] if i > pivot]
+        pivot: int = lst[-1]
+        left: list[int] = [i for i in lst[:-1] if i <= pivot]
+        right: list[int] = [i for i in lst[:-1] if i > pivot]
 
-        left_sorted = QuickSort.sort(left)
-        right_sorted = QuickSort.sort(right)
+        left_sorted: list[int] = QuickSort.sort(left)
+        right_sorted: list[int] = QuickSort.sort(right)
 
-        sorted_list = left_sorted + [pivot] + right_sorted
+        sorted_list: list[int] = left_sorted + [pivot] + right_sorted
         return sorted_list
 
 

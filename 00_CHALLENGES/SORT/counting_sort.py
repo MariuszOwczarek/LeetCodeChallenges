@@ -43,13 +43,13 @@ Example:
 class CountingSort:
     @staticmethod
     def sort(lst: list[int]) -> list[int]:
-        max_val = max(lst)
-        count_arr = [0] * (max_val + 1)
+        max_val: int = max(lst)
+        count_arr: list[int] = [0] * (max_val + 1)
 
         for i in range(len(lst)):
             count_arr[lst[i]] += 1
 
-        new_lst = []
+        new_lst: list[int] = []
         for i in range(len(count_arr)):
             new_lst.extend([i] * count_arr[i])
         return new_lst

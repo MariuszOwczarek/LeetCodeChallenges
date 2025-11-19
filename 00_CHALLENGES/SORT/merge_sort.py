@@ -38,15 +38,16 @@ class MergeSort:
         if len(lst) <= 1:
             return lst
 
-        mid = len(lst) // 2
+        mid: int = len(lst) // 2
         left = lst[0:mid]
         right = lst[mid:]
 
-        sorted_left = MergeSort.sort(left)
-        sorted_right = MergeSort.sort(right)
+        sorted_left: list[int] = MergeSort.sort(left)
+        sorted_right: list[int] = MergeSort.sort(right)
 
-        merged = []
-        i, j = 0, 0
+        merged: list[int] = []
+        i: int = 0
+        j: int = 0
         while i < len(sorted_left) and j < len(sorted_right):
             if sorted_left[i] <= sorted_right[j]:
                 merged.append(sorted_left[i])
