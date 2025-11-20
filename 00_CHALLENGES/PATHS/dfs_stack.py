@@ -1,13 +1,14 @@
 """
-BFS Traversal Module
+DFS Traversal Module
 
-This module implements a simple BFS (Breadth-First Search) traversal
+This module implements a simple DFS (Depth-First Search) traversal
 for an unweighted directed graph using a class-based approach.
 
 Features:
 - Tracks visited nodes
-- Computes distance (number of steps) from the start node
-- Prints final graph state with neighbors, visited status, and distances
+- Computes distance (depth) from the start node
+- Records the exact DFS traversal path
+- Prints processing steps and traversal order
 
 The graph is represented as a dictionary where each key is a node,
 and each value is another dictionary containing:
@@ -15,7 +16,6 @@ and each value is another dictionary containing:
     - 'visited': boolean, True if the node has been visited
     - 'distance': number of steps from the start node (None if unvisited)
 """
-
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -70,19 +70,26 @@ class GraphVisualizer:
         plt.show()
 
 
-class BFS:
+class DFS:
     """
-    Implements Breadth-First Search (BFS) on a given graph.
+    Implements Depth-First Search (DFS) on a given graph using a
+    stack-based approach.
 
     Attributes:
         lst (dict): Graph representation where each node maps to a dictionary
                     containing 'neighbors', 'visited', and 'distance'.
+        start_node (str): Node where DFS traversal starts (default 'A').
+        distance (int): Initial distance for the start node (default 0).
+        traversal_path (list): Ordered list of nodes as they are visited.
 
     Methods:
         show() -> dict:
-            Performs BFS traversal starting from node 'A'.
-            Marks nodes as visited, computes distances (steps from 'A'),
-            and prints the final state of the graph.
+            Performs DFS traversal starting from `start_node`.
+            Marks nodes as visited, computes depth (distance) from start,
+            prints each node being processed, and stores the
+            DFS traversal order.
+            Returns the updated graph dictionary with visited
+            status and distances.
 
     Graph structure example:
         {
@@ -93,15 +100,11 @@ class BFS:
         }
     """
 
-    def __init__(
-        self,
-        lst: dict,
-        start_node: str = 'A',
-        distance: int = 0
-    ) -> None:
+    def __init__(self, lst: dict, start_node='A', distance=0) -> None:
         self.lst = lst
         self.start_node = start_node
         self.distance = distance
+        self.traversal_path = []
 
     def show(self) -> dict:
         if self.start_node not in self.lst:
@@ -115,44 +118,60 @@ class BFS:
         current_node: str = self.start_node
         current_distance: int = self.distance
         self.lst[current_node]['distance'] = int(current_distance)
-        queue_list: list[str] = [current_node]
+        stack: list = [(current_node, current_distance)]
 
-        while queue_list:
-            item: str = queue_list.pop(0)
-            self.lst[item]['visited'] = True
+        while stack:
+            item, dist = stack.pop()
 
-            for neighbor in self.lst[item]['neighbors']:
-                if not self.lst[neighbor]['visited']:
-                    self.lst[neighbor]['visited'] = True
-                    current_distance: int = self.lst[item]['distance']
-                    self.lst[neighbor]['distance'] = current_distance + 1
-                    queue_list.append(neighbor)
+            if not self.lst[item]['visited']:
+                self.lst[item]['visited'] = True
+                self.lst[item]['distance'] = dist
+                self.traversal_path.append(item)
+                print(f"Processing node: {item}, "
+                      f"Distance: {self.lst[item]['distance']}, "
+                      f"Neighbors: {self.lst[item]['neighbors']}")
 
-        print("Final graph state:")
-        for node in self.lst:
-            neighbors: list[str] = self.lst[node]['neighbors']
-            neighbors_str: str = ', '.join(neighbors) if neighbors else "None"
-            visited: bool = self.lst[node]['visited']
-            distance: int | None = self.lst[node]['distance']
-            info: str = (
-                f"Node {node}, visited:{visited}, "
-                f"distance:{distance} ->"
-            )
-            print(info, "neighbors:", neighbors_str)
+                for neighbor in reversed(self.lst[item]['neighbors']):
+                    if not self.lst[neighbor]['visited']:
+                        stack.append((neighbor, dist + 1))
+
+        print("\nDFS path with distances:")
+        for node in self.traversal_path:
+            print(f"{node}({self.lst[node]['distance']})", end=" → ")
+        print("END\n")
+
         return self.lst
 
 
 lst = {
-    'A': {'neighbors': ['B', 'C'], 'distance': None, 'visited': False},
-    'B': {'neighbors': ['D', 'E'], 'distance': None, 'visited': False},
-    'C': {'neighbors': ['F'], 'distance': None, 'visited': False},
-    'D': {'neighbors': ['G'], 'distance': None, 'visited': False},
-    'E': {'neighbors': ['G', 'H'], 'distance': None, 'visited': False},
-    'F': {'neighbors': ['H'], 'distance': None, 'visited': False},
-    'G': {'neighbors': ['I'], 'distance': None, 'visited': False},
-    'H': {'neighbors': ['I'], 'distance': None, 'visited': False},
-    'I': {'neighbors': ['J'], 'distance': None, 'visited': False},
-    'J': {'neighbors': [], 'distance': None, 'visited': False}
+    'A':  {'neighbors': ['B', 'C', 'D', 'F'],
+           'distance': None,
+           'visited': False},
+    'B':  {'neighbors': ['E', 'F', 'H'],
+           'distance': None,
+           'visited': False},
+    'C':  {'neighbors': ['F', 'G'],
+           'distance': None,
+           'visited': False},
+    'D':  {'neighbors': ['H'],
+           'distance': None,
+           'visited': False},
+    'E':  {'neighbors': ['I', 'C'],
+           'distance': None,
+           'visited': False},
+    'F':  {'neighbors': ['D'],
+           'distance': None,
+           'visited': False},
+    'G':  {'neighbors': ['H', 'B'],
+           'distance': None,
+           'visited': False},
+    'H':  {'neighbors': ['C'],
+           'distance': None,
+           'visited': False},
+    'I':  {'neighbors': ['F'],
+           'distance': None,
+           'visited': False}
 }
-show_path = BFS(lst=lst, start_node='A').show()
+
+show_path = DFS(lst=lst, start_node='A', distance=0).show()
 visualizer = GraphVisualizer(show_path).draw()
