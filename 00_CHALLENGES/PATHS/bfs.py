@@ -44,11 +44,10 @@ class GraphVisualizer:
         G = nx.DiGraph()
         colors = []
 
-        # Add edges and decide node colors
         for node, data in self.lst.items():
             for neigh in data['neighbors']:
                 G.add_edge(node, neigh)
-            # Decide node color based on visited status
+
             colors.append(visited_color if data['visited']
                           else unvisited_color)
 
@@ -62,7 +61,6 @@ class GraphVisualizer:
             font_size=8
         )
 
-        # Optionally show distances on nodes
         labels = {
             node: f"{node}\n{data['distance']}" for
             node, data in self.lst.items()}
@@ -95,12 +93,28 @@ class BFS:
         }
     """
 
-    def __init__(self, lst: dict, start_node: str = 'A') -> None:
+    def __init__(
+        self,
+        lst: dict,
+        start_node: str = 'A',
+        distance: int = 0
+    ) -> None:
         self.lst = lst
         self.start_node = start_node
+        self.distance = distance
 
     def show(self) -> dict:
+        if self.start_node not in self.lst:
+            raise ValueError(f"start_node {self.start_node!r}"
+                             f" is not in the graph")
+
+        for node in self.lst:
+            self.lst[node]['visited'] = False
+            self.lst[node]['distance'] = None
+
         current_node: str = self.start_node
+        current_distance: int = self.distance
+        self.lst[current_node]['distance'] = int(current_distance)
         queue_list: list[str] = [current_node]
 
         while queue_list:
@@ -131,14 +145,14 @@ class BFS:
 lst = {
     'A': {'neighbors': ['B', 'C'], 'distance': None, 'visited': False},
     'B': {'neighbors': ['D', 'E'], 'distance': None, 'visited': False},
-    'C': {'neighbors': ['F'], 'distance': 0, 'visited': False},
+    'C': {'neighbors': ['F'], 'distance': None, 'visited': False},
     'D': {'neighbors': ['G'], 'distance': None, 'visited': False},
     'E': {'neighbors': ['G', 'H'], 'distance': None, 'visited': False},
     'F': {'neighbors': ['H'], 'distance': None, 'visited': False},
     'G': {'neighbors': ['I'], 'distance': None, 'visited': False},
-    'H': {'neighbors': ['I', 'J'], 'distance': None, 'visited': False},
+    'H': {'neighbors': ['I'], 'distance': None, 'visited': False},
     'I': {'neighbors': ['J'], 'distance': None, 'visited': False},
     'J': {'neighbors': [], 'distance': None, 'visited': False}
 }
-show_path = BFS(lst, start_node='C').show()
+show_path = BFS(lst=lst, start_node='A').show()
 visualizer = GraphVisualizer(show_path).draw()
